@@ -1,0 +1,28 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div>
+      <h1>Register Here</h1>
+      <form action="/register/" method="post">
+        {% csrf_token %}
+        <p>
+          <label>user name:</label>
+          <input name="name" />
+        </p>
+        <p>
+          <label>user password:</label>
+          <input name="password" />
+        </p>
+        <p>
+          <label>user email:</label>
+          <input name="email" />
+        </p>
+        <input type="submit" value="register" />
+      </form>
+    </div>
+  </body>
+</html>
