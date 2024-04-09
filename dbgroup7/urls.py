@@ -21,5 +21,11 @@ from dbgroup7_app import views
 urlpatterns = [
     # path("admin/", admin.site.urls),
     path('', views.testmysql, name='testmysql'),
+    path('login/', views.login),
+    path('login/login_view/', views.login_view, name='login_view'),
+    path('toregister/', views.to_register),
+    path("register/", views.register_view),
+    path('admin/', views.admin_login),
+    path('admin/admin_view/', views.admin_view, name="admin_view"),
     path('phone/', views.phone, name='phone'),
 ]
