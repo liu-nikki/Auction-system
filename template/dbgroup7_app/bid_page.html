@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Bid on Item</title>
+    <!--  link CSS files here -->
+</head>
+<body>
+    <div class="auction-details">
+        <h1>Bid on {{ auction.phone.brand }} {{ auction.phone.model }}</h1>
+        <p>Category: {{ auction.phone.category.category_name }}</p>
+        <p>Original Price: ${{ auction.starting_price }}</p>
+    </div>
+
+    <div class="bid-form">
+        <h2>Place Your Bid</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }} <!-- Renders the form fields here -->
+            <button type="submit">Submit Bid</button>
+        </form>
+    </div>
+
+    {% if messages %}
+    <ul class="messages">
+    {% for message in messages %}
+    <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+    </ul>
+    {% endif %}
+
+
+    <!--  link to JS files  -->
+</body>
+</html>
