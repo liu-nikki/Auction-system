@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Payment and Shipping Information</title>
+</head>
+<body>
+    <h2>Payment and Shipping Information</h2>
+    <form method="post">
+        {% csrf_token %}
+        <fieldset>
+            <legend>Payment Information:</legend>
+            {{ payment_form.as_p }}
+        </fieldset>
+        <fieldset>
+            <legend>Shipping Information:</legend>
+            {{ shipping_form.as_p }}
+        </fieldset>
+        <input type="submit" value="Submit">
+    </form>
+</body>
+</html>
+

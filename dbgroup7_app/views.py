@@ -2,8 +2,8 @@ from django.shortcuts import render, HttpResponse
 from .forms import PaymentInfoForm, ShippingForm
 from .models import *
 # Create your views here.
-def home(request):
-    return HttpResponse("Welcome to My Site!")
+# def home(request):
+#     return HttpResponse("Welcome to My Site!")
 
 def payment_and_shipping_view(request):
     if request.method == 'POST':
