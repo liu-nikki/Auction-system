@@ -19,6 +19,7 @@ from dbgroup7_app import views
 from django.contrib import admin
 from django.urls import path, include
 from dbgroup7_app import views
+from dbgroup7_app.views import bid_view, testmysql
 
 urlpatterns = [
     path('', views.login),
@@ -29,4 +30,5 @@ urlpatterns = [
     path('phone/', views.phone, name='phone'),
     path('login/phone/', views.phone, name='phone'),
     path('payment-and-shipping/', views.payment_and_shipping_view, name='payment_and_shipping'),
+    path('auction/<int:auction_id>/bid/', bid_view, name='bid_view'),
 ]

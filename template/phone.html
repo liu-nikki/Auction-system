@@ -9,13 +9,11 @@
             border-collapse: collapse;
             width: 100%;
         }
-
         th, td {
             border: 1px solid #dddddd;
             text-align: left;
             padding: 8px;
         }
-
         th {
             background-color: #f2f2f2;
         }
@@ -30,6 +28,7 @@
         <th>Model</th>
         <th>Category</th>
         <th>Current Price</th>
+        <th>Auction ID</th>
         <th>Bid</th>
     </tr>
     {% for phone in phones %}
@@ -39,7 +38,9 @@
         <td>{{ phone.model }}</td>
         <td>{{ phone.category.category_name }}</td>
         <td>{{ phone.current_price }}</td>
-        <td><a href="url pending">
+        <td>{{ phone.auction_id }}</td>
+
+        <td><a href="{% url 'bid_view' phone.auction_id %}">
             <button>Bid</button>
         </a>
         </td>
