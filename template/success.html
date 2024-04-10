@@ -1,11 +1,18 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Submission Successful</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="refresh" content="5;url={% url 'phone' %}">
+    <title>Success</title>
 </head>
 <body>
-    <h1>Success!</h1>
-    <p>Your payment and shipping information has been submitted successfully.</p>
-    <a href="/">Return to Home</a>
+    <h1>Payment and Shipping Information Saved Successfully!</h1>
+    <p>You will be redirected back to the auction items page shortly.</p>
+
+    <script>
+        setTimeout(function() {
+            window.location.href = "{% url 'phone' %}";
+        }, 5000); // Redirect after 5000 milliseconds (5 seconds)
+    </script>
 </body>
 </html>
