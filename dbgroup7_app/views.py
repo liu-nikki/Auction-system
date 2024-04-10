@@ -8,6 +8,13 @@ def testmysql(req):
     return render(req, 'home.html')
 
 
+# def phone(req):
+#     return render(req, 'phone.html')
+
+def phone(request):
+    phones = Phone.objects.all()
+
+
 def login(req):
     return render(req, 'login.html')
 

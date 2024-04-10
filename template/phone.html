@@ -9,19 +9,36 @@
             border-collapse: collapse;
             width: 100%;
         }
+<<<<<<< HEAD
+=======
 
+>>>>>>> new_phone
         th, td {
             border: 1px solid #dddddd;
             text-align: left;
             padding: 8px;
         }
+<<<<<<< HEAD
+=======
 
+>>>>>>> new_phone
         th {
             background-color: #f2f2f2;
         }
     </style>
 </head>
 <body>
+<<<<<<< HEAD
+    <h2>Auction Items</h2>
+    <table>
+        <tr>
+            <th>Phone ID</th>
+            <th>Brand</th>
+            <th>Model</th>
+            <th>Category</th>
+        </tr>
+        {% for phone in phones %}
+=======
 <h2>Auction Items</h2>
 <table>
     <tr>
@@ -33,11 +50,17 @@
         <th>Bid</th>
     </tr>
     {% for phone in phones %}
+>>>>>>> new_phone
         <tr>
             <td>{{ phone.phone_id }}</td>
             <td>{{ phone.brand }}</td>
             <td>{{ phone.model }}</td>
             <td>{{ phone.category.category_name }}</td>
+<<<<<<< HEAD
+        </tr>
+        {% endfor %}
+    </table>
+=======
             <td>{{ phone.current_price }}</td>
             <td><a href="url pending">
                 <button>Bid</button>
@@ -46,5 +69,6 @@
         </tr>
     {% endfor %}
 </table>
+>>>>>>> new_phone
 </body>
 </html>
