@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phone Table</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+<h2>Auction Items</h2>
+<table>
+    <tr>
+        <th>Phone ID</th>
+        <th>Brand</th>
+        <th>Model</th>
+        <th>Category</th>
+        <th>Current Price</th>
+        <th>Bid</th>
+    </tr>
+    {% for phone in phones %}
+    <tr>
+        <td>{{ phone.phone_id }}</td>
+        <td>{{ phone.brand }}</td>
+        <td>{{ phone.model }}</td>
+        <td>{{ phone.category.category_name }}</td>
+        <td>{{ phone.current_price }}</td>
+        <td><a href="url pending">
+            <button>Bid</button>
+        </a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+</body>
+</html>
