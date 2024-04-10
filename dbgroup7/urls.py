@@ -29,6 +29,6 @@ urlpatterns = [
     path('admin/admin_view/', views.admin_view, name="admin_view"),
     path('phone/', views.phone, name='phone'),
     path('login/phone/', views.phone, name='phone'),
-    path('payment-and-shipping/', views.payment_and_shipping_view, name='payment_and_shipping'),
+    path('payment-and-shipping/<int:auction_id>/', views.payment_and_shipping_view, name='payment_and_shipping'),
     path('auction/<int:auction_id>/bid/', bid_view, name='bid_view'),
 ]
