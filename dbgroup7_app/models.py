@@ -32,17 +32,16 @@ class Auction(models.Model):
 
 
 class Bid(models.Model):
-    bid_id = models.IntegerField(primary_key=True)
+    bid_id = models.AutoField(primary_key=True)
     auction = models.ForeignKey(Auction, models.DO_NOTHING, blank=True, null=True)
     normal_user = models.ForeignKey('Normaluser', models.DO_NOTHING, blank=True, null=True)
     admin_user = models.ForeignKey(Adminuser, models.DO_NOTHING, blank=True, null=True)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
-    timestamp = models.DateTimeField()
+    timestamp = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         # managed = False
         db_table = 'Bid'
-
 
 class Category(models.Model):
     category_id = models.AutoField(primary_key=True)

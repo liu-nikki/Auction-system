@@ -1,9 +1,7 @@
-from django.shortcuts import render, HttpResponse
-from .forms import PaymentInfoForm, ShippingForm
+from django.shortcuts import render, HttpResponse, get_object_or_404, redirect
+from .forms import PaymentInfoForm, ShippingForm, BidForm
 from .models import *
-# Create your views here.
-# def home(request):
-#     return HttpResponse("Welcome to My Site!")
+from django.contrib import messages
 
 def payment_and_shipping_view(request):
     if request.method == 'POST':
@@ -20,6 +18,7 @@ def payment_and_shipping_view(request):
         'payment_form': payment_form,
         'shipping_form': shipping_form,
     })
+
 
 # Create your views here.
 def testmysql(req):
@@ -93,4 +92,38 @@ def phone(request):
         auction = Auction.objects.filter(phone_id=phone.phone_id).first()
         if auction:
             phone.current_price = auction.starting_price
+            phone.auction_id = auction.auction_id
     return render(request, 'phone.html', {'phones': phones})
+
+
+def bid_view(request, auction_id):
+    auction = get_object_or_404(Auction, pk=auction_id)
+    if request.method == 'POST':
+        form = BidForm(request.POST)
+        if form.is_valid():
+            new_bid_amount = form.cleaned_data['amount']
+            highest_bid = Bid.objects.filter(auction=auction).order_by('-amount').first()
+
+            if highest_bid is None:
+                highest_bid_amount = auction.starting_price
+            else:
+                highest_bid_amount = highest_bid.amount
+
+            if new_bid_amount <= highest_bid_amount + 50:
+                messages.error(request, "Bidding Failed, higher bid price exist, please try again later.")
+            else:
+                bid = form.save(commit=False)
+                bid.auction = auction
+                # Fetch the Normaluser instance using ID and assign it to bid.normal_user
+                bid.normal_user = request.user
+                normal_user_instance = get_object_or_404(Normaluser, pk=1)
+                bid.normal_user = normal_user_instance
+                bid.save()
+                messages.success(request, "Bid successfully placed! Proceed to payment.")
+                return redirect('payment_page', auction_id=auction.auction_id)  # Adjust this to your actual payment page URL name
+
+    else:
+        form = BidForm()
+
+    return render(request, 'dbgroup7_app/bid_page.html', {'auction': auction, 'form': form})
+

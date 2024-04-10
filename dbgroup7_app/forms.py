@@ -1,5 +1,5 @@
 from django import forms
-from .models import Paymentinfo, Shipping
+from .models import Paymentinfo, Shipping, Bid
 
 class PaymentInfoForm(forms.ModelForm):
     class Meta:
@@ -10,3 +10,8 @@ class ShippingForm(forms.ModelForm):
     class Meta:
         model = Shipping
         fields = ['shipping_address', 'shipping_date']
+
+class BidForm(forms.ModelForm):
+    class Meta:
+        model = Bid
+        fields = ['amount']
