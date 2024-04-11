@@ -1,9 +1,7 @@
-from django.shortcuts import render, HttpResponse
-from .forms import PaymentInfoForm, ShippingForm
+from django.shortcuts import render, HttpResponse, redirect, get_object_or_404
+from .forms import PaymentInfoForm, ShippingForm, PhoneAuctionForm, BidForm
 from .models import *
-# Create your views here.
-# def home(request):
-#     return HttpResponse("Welcome to My Site!")
+from django.contrib import messages
 
 def payment_and_shipping_view(request, auction_id):
     auction = get_object_or_404(Auction, pk=auction_id)  # Ensure you have the auction
@@ -27,12 +25,6 @@ def payment_and_shipping_view(request, auction_id):
         'shipping_form': shipping_form,
         'auction': auction,  # Provide auction to the template to use its details
     })
-
-from django.contrib import messages
-from django.shortcuts import render, get_object_or_404, redirect
-
-from .models import Auction, Bid, Normaluser
-from .forms import BidForm
 
 # Create your views here.
 def testmysql(req):
@@ -77,9 +69,9 @@ def register_view(req):
     if name and pwd and email:
         account = Normaluser(username=name, password=pwd, email=email)
         account.save()
-        return HttpResponse("Register Successfully!")
+        return render(req, 'registration_success.html')
     else:
-        return HttpResponse("Please register.")
+        return HttpResponse("Please fill all fields.")
 
 
 def admin_login(req):
@@ -138,3 +130,29 @@ def bid_view(request, auction_id):
         form = BidForm()
 
     return render(request, 'dbgroup7_app/bid_page.html', {'auction': auction, 'form': form})
+
+def list_phone_auction_view(request):
+    if request.method == 'POST':
+        form = PhoneAuctionForm(request.POST)
+        if form.is_valid():
+            # Create Phone
+            phone = Phone(
+                brand=form.cleaned_data['brand'],
+                model=form.cleaned_data['model'],
+                category=form.cleaned_data['category']
+            )
+            phone.save()
+
+            # Create Auction
+            auction = Auction(
+                phone=phone,
+                start_time=form.cleaned_data['start_time'],
+                end_time=form.cleaned_data['end_time'],
+                starting_price=form.cleaned_data['starting_price']
+            )
+            auction.save()
+
+            return redirect('phone')  # Redirect to a success page or the auction detail page
+    else:
+        form = PhoneAuctionForm()
+    return render(request, 'list.html', {'form': form})

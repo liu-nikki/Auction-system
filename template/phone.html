@@ -17,9 +17,17 @@
         th {
             background-color: #f2f2f2;
         }
+        .top-right {
+            position: absolute;
+            top: 8px;
+            right: 16px;
+        }
     </style>
 </head>
 <body>
+<div class="top-right">
+    <a href="{% url 'list_phone_auction' %}"><button>List a Phone</button></a>
+</div>
 <h2>Auction Items</h2>
 <table>
     <tr>

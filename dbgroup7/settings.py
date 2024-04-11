@@ -104,7 +104,7 @@ else:
             'ENGINE': 'django.db.backends.mysql',
             'NAME': 'CS5200_Project',
             'USER': 'root',
-            'PASSWORD': '12345678',
+            'PASSWORD': '',
             'HOST': 'localhost', 
             # group 7
             # 'HOST': '35.247.73.150', 
