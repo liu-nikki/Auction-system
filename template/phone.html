@@ -1,28 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Phone Table</title>
     <style>
-        table {
-            border-collapse: collapse;
-            width: 100%;
-        }
-        th, td {
-            border: 1px solid #dddddd;
-            text-align: left;
-            padding: 8px;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
+      table {
+        border-collapse: collapse;
+        width: 100%;
+      }
+      th,
+      td {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+      }
+      th {
+        background-color: #f2f2f2;
+      }
+      .top-right {
+        position: absolute;
+        top: 8px;
+        right: 16px;
+      }
     </style>
-</head>
-<body>
-<h2>Auction Items</h2>
-<table>
-    <tr>
+  </head>
+  <body>
+    <div class="top-right">
+      <a href="{% url 'list_phone_auction' %}"><button>List a Phone</button></a>
+    </div>
+    <h2>Auction Items</h2>
+    <table>
+      <tr>
         <th>Phone ID</th>
         <th>Brand</th>
         <th>Model</th>
@@ -30,9 +39,9 @@
         <th>Current Price</th>
         <th>Auction ID</th>
         <th>Bid</th>
-    </tr>
-    {% for phone in phones %}
-    <tr>
+      </tr>
+      {% for phone in phones %}
+      <tr>
         <td>{{ phone.phone_id }}</td>
         <td>{{ phone.brand }}</td>
         <td>{{ phone.model }}</td>
@@ -40,12 +49,13 @@
         <td>{{ phone.current_price }}</td>
         <td>{{ phone.auction_id }}</td>
 
-        <td><a href="{% url 'bid_view' phone.auction_id %}">
+        <td>
+          <a href="{% url 'bid_view' phone.auction_id %}">
             <button>Bid</button>
-        </a>
+          </a>
         </td>
-    </tr>
-    {% endfor %}
-</table>
-</body>
+      </tr>
+      {% endfor %}
+    </table>
+  </body>
 </html>
