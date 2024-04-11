@@ -3,22 +3,34 @@ from .forms import PaymentInfoForm, ShippingForm, BidForm
 from .models import *
 from django.contrib import messages
 
-def payment_and_shipping_view(request):
+def payment_and_shipping_view(request, auction_id):
+    auction = get_object_or_404(Auction, pk=auction_id)  # Ensure you have the auction
     if request.method == 'POST':
         payment_form = PaymentInfoForm(request.POST, prefix='payment')
         shipping_form = ShippingForm(request.POST, prefix='shipping')
         if payment_form.is_valid() and shipping_form.is_valid():
-            payment_form.save()
-            shipping_form.save()
-            return render(request, 'success.html')  # You need to create a success.html template
+            payment_info = payment_form.save(commit=False)
+            shipping_info = shipping_form.save(commit=False)
+            # Assume you have a field in PaymentInfo and Shipping models to link them to an auction
+            payment_info.auction = auction
+            shipping_info.auction = auction
+            payment_info.save()
+            shipping_info.save()
+            return render(request, 'success.html', {'auction': auction})  # Pass auction to the template if needed
     else:
         payment_form = PaymentInfoForm(prefix='payment')
         shipping_form = ShippingForm(prefix='shipping')
     return render(request, 'payment_and_shipping.html', {
         'payment_form': payment_form,
         'shipping_form': shipping_form,
+        'auction': auction,  # Provide auction to the template to use its details
     })
 
+from django.contrib import messages
+from django.shortcuts import render, get_object_or_404, redirect
+
+from .models import Auction, Bid, Normaluser
+from .forms import BidForm
 
 # Create your views here.
 def testmysql(req):
@@ -114,16 +126,13 @@ def bid_view(request, auction_id):
             else:
                 bid = form.save(commit=False)
                 bid.auction = auction
-                # Fetch the Normaluser instance using ID and assign it to bid.normal_user
-                bid.normal_user = request.user
                 normal_user_instance = get_object_or_404(Normaluser, pk=1)
                 bid.normal_user = normal_user_instance
                 bid.save()
                 messages.success(request, "Bid successfully placed! Proceed to payment.")
-                return redirect('payment_page', auction_id=auction.auction_id)  # Adjust this to your actual payment page URL name
+                return redirect('payment_and_shipping', auction_id=auction.auction_id)  # Adjust this to your actual payment page URL name
 
     else:
         form = BidForm()
 
     return render(request, 'dbgroup7_app/bid_page.html', {'auction': auction, 'form': form})
-
