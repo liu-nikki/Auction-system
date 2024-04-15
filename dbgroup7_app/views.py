@@ -5,7 +5,6 @@ from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 
-
 def payment_and_shipping_view(request, auction_id):
     auction = get_object_or_404(Auction, pk=auction_id)  # Ensure you have the auction
     if request.method == 'POST':
@@ -33,33 +32,58 @@ def payment_and_shipping_view(request, auction_id):
 def testmysql(req):
     return render(req, 'home.html')
 
-
-# def phone(req):
-#     return render(req, 'phone.html')
-
 def phone(request):
     phones = Phone.objects.all()
-
 
 def login(req):
     return render(req, 'login.html')
 
-
 # after login 
+# def login_view(req):
+#     name = req.POST.get("name", "")
+#     pwd = req.POST.get("password", "")
+#     if name and pwd:
+#         # see if match database 
+#         c = Normaluser.objects.filter(username=name, password=pwd)
+#         if c.exists():
+#             # return HttpResponse("Login Successfully!")
+#             return HttpResponseRedirect(reverse('phone'))
+#         else:
+#             return HttpResponse("A wrong user name or password.")
+#     else:
+#         return HttpResponse("Please login.")
+
 def login_view(req):
-    name = req.POST.get("name", "")
-    pwd = req.POST.get("password", "")
-    if name and pwd:
-        # see if match database 
-        c = Normaluser.objects.filter(username=name, password=pwd)
-        if c.exists():
-            # return HttpResponse("Login Successfully!")
-            return HttpResponseRedirect(reverse('phone'))
+    if req.method == "POST":
+        name = req.POST.get("name", "")
+        pwd = req.POST.get("password", "")
+        if name and pwd:
+            try:
+                user = Normaluser.objects.get(username=name)
+                print(user.password)
+                print(pwd)
+                if pwd == user.password:
+                    req.session['normal_user_id'] = user.normal_user_id  # Store user ID in session
+                    return HttpResponseRedirect(reverse('phone'))  # Use reverse to handle URLs
+                else:
+                    return HttpResponse("A wrong user name or password.")
+            except Normaluser.DoesNotExist:
+                return HttpResponse("A wrong user name or password.")
         else:
-            return HttpResponse("A wrong user name or password.")
+            return HttpResponse("Please login.")
     else:
-        return HttpResponse("Please login.")
-    # return render(req, 'login_view.html')
+        return render(req, 'login.html')  # Show login form
+
+def profile_view(request):
+    user_id = request.session.get('normal_user_id')
+    if user_id:
+        try:
+            user = Normaluser.objects.get(normal_user_id=user_id)
+            return render(request, 'profile.html', {'user': user})
+        except Normaluser.DoesNotExist:
+            return HttpResponse("User not found")
+    else:
+        return redirect('login_view')
 
 
 def to_register(req):
@@ -127,7 +151,6 @@ def bid_view(request, auction_id):
                 normal_user_instance = get_object_or_404(Normaluser, pk=1)
                 bid.normal_user = normal_user_instance
                 bid.save()
-                messages.success(request, "Bid successfully placed! Proceed to payment.")
                 return redirect('payment_and_shipping', auction_id=auction.auction_id)  # Adjust this to your actual payment page URL name
 
     else:

@@ -50,6 +50,9 @@ class Category(models.Model):
     class Meta:
         # managed = False
         db_table = 'Category'
+    
+    def __str__(self):
+        return self.category_name
 
 
 class Feedback(models.Model):

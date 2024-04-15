@@ -32,4 +32,5 @@ urlpatterns = [
     path('payment-and-shipping/<int:auction_id>/', views.payment_and_shipping_view, name='payment_and_shipping'),
     path('auction/<int:auction_id>/bid/', bid_view, name='bid_view'),
     path('list/', views.list_phone_auction_view, name='list_phone_auction'),
+    path('profile/', views.profile_view, name='profile_view'),
 ]
