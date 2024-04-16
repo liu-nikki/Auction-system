@@ -1,0 +1,27 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <table>
+      <tr>
+        <th>Username</th>
+        <th>Email</th>
+        <th>Actions</th>
+      </tr>
+      {% for user in users %}
+      <tr>
+        <td>{{ user.username }}</td>
+        <td>{{ user.email }}</td>
+        <td>
+          <a href="{% url 'edit_user' user.normal_user_id %}">Edit</a>
+          <a href="{% url 'delete_user' user.normal_user_id %}">Delete</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+    <a href="{% url 'toregister' %}">Add a new user</a>
+  </body>
+</html>

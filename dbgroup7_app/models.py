@@ -34,7 +34,8 @@ class Auction(models.Model):
 class Bid(models.Model):
     bid_id = models.AutoField(primary_key=True)
     auction = models.ForeignKey(Auction, models.DO_NOTHING, blank=True, null=True)
-    normal_user = models.ForeignKey('Normaluser', models.DO_NOTHING, blank=True, null=True)
+    # normal_user = models.ForeignKey('Normaluser', models.DO_NOTHING, blank=True, null=True)
+    normal_user = models.ForeignKey('Normaluser', on_delete=models.CASCADE, blank=True, null=True)
     admin_user = models.ForeignKey(Adminuser, models.DO_NOTHING, blank=True, null=True)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     timestamp = models.DateTimeField(auto_now_add=True)
@@ -50,12 +51,16 @@ class Category(models.Model):
     class Meta:
         # managed = False
         db_table = 'Category'
+    
+    def __str__(self):
+        return self.category_name
 
 
 class Feedback(models.Model):
     feedback_id = models.AutoField(primary_key=True)
     transaction = models.ForeignKey('Transaction', models.DO_NOTHING, blank=True, null=True)
-    user = models.ForeignKey('Normaluser', models.DO_NOTHING, blank=True, null=True)
+    # user = models.ForeignKey('Normaluser', models.DO_NOTHING, blank=True, null=True)
+    user = models.ForeignKey('Normaluser', on_delete=models.SET_NULL, blank=True, null=True)
     rating = models.IntegerField()
     comment = models.TextField(blank=True, null=True)
 
@@ -77,7 +82,8 @@ class Normaluser(models.Model):
 
 class Paymentinfo(models.Model):
     payment_info_id = models.AutoField(primary_key=True)
-    user = models.ForeignKey(Normaluser, models.DO_NOTHING, blank=True, null=True)
+    # user = models.ForeignKey(Normaluser, models.DO_NOTHING, blank=True, null=True)
+    user = models.ForeignKey(Normaluser, on_delete=models.SET_NULL, blank=True, null=True)
     payment_method = models.CharField(max_length=255)
     billing_address = models.CharField(max_length=255)
 
@@ -119,14 +125,24 @@ class Shipping(models.Model):
         db_table = 'Shipping'
 
 
+# class Transaction(models.Model):
+#     transaction_id = models.AutoField(primary_key=True)
+#     auction = models.ForeignKey(Auction, models.DO_NOTHING, blank=True, null=True)
+#     buyer = models.ForeignKey(Normaluser, models.DO_NOTHING, blank=True, null=True,)
+#     seller = models.ForeignKey(Normaluser, models.DO_NOTHING, related_name='transaction_seller_set', blank=True, null=True)
+#     transaction_amount = models.DecimalField(max_digits=10, decimal_places=2)
+#     transaction_date = models.DateTimeField()
+
+#     class Meta:
+#         # managed = False
+#         db_table = 'Transaction'
 class Transaction(models.Model):
     transaction_id = models.AutoField(primary_key=True)
-    auction = models.ForeignKey(Auction, models.DO_NOTHING, blank=True, null=True)
-    buyer = models.ForeignKey(Normaluser, models.DO_NOTHING, blank=True, null=True)
-    seller = models.ForeignKey(Normaluser, models.DO_NOTHING, related_name='transaction_seller_set', blank=True, null=True)
+    auction = models.ForeignKey(Auction, on_delete=models.DO_NOTHING, blank=True, null=True)
+    buyer = models.ForeignKey(Normaluser, on_delete=models.SET_NULL, blank=True, null=True, related_name='transactions_as_buyer')
+    seller = models.ForeignKey(Normaluser, on_delete=models.SET_NULL, blank=True, null=True, related_name='transactions_as_seller')
     transaction_amount = models.DecimalField(max_digits=10, decimal_places=2)
     transaction_date = models.DateTimeField()
 
     class Meta:
-        # managed = False
         db_table = 'Transaction'
