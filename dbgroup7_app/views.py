@@ -2,6 +2,9 @@ from django.shortcuts import render, HttpResponse, redirect, get_object_or_404
 from .forms import PaymentInfoForm, ShippingForm, PhoneAuctionForm, BidForm
 from .models import *
 from django.contrib import messages
+from django.http import HttpResponseRedirect
+from django.urls import reverse
+
 
 def payment_and_shipping_view(request, auction_id):
     auction = get_object_or_404(Auction, pk=auction_id)  # Ensure you have the auction
@@ -50,7 +53,8 @@ def login_view(req):
         # see if match database 
         c = Normaluser.objects.filter(username=name, password=pwd)
         if c.exists():
-            return HttpResponse("Login Successfully!")
+            # return HttpResponse("Login Successfully!")
+            return HttpResponseRedirect(reverse('phone'))
         else:
             return HttpResponse("A wrong user name or password.")
     else:
