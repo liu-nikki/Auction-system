@@ -9,24 +9,37 @@
             border-collapse: collapse;
             width: 100%;
         }
+
         th, td {
             border: 1px solid #dddddd;
             text-align: left;
             padding: 8px;
+            width: 150px;
+            height: 150px;
         }
+
         th {
             background-color: #f2f2f2;
         }
+
         .top-right {
             position: absolute;
             top: 8px;
             right: 16px;
         }
+
+        .bid-image {
+            max-width: 100px; /* Adjust this value to control the width of the image */
+            width: 100px;
+            height: 110px;
+        }
     </style>
 </head>
 <body>
 <div class="top-right">
-    <a href="{% url 'list_phone_auction' %}"><button>List a Phone</button></a>
+    <a href="{% url 'list_phone_auction' %}">
+        <button>List a Phone</button>
+    </a>
 </div>
 <h2>Auction Items</h2>
 <table>
@@ -35,24 +48,32 @@
         <th>Brand</th>
         <th>Model</th>
         <th>Category</th>
+        <th>Photo</th>
         <th>Current Price</th>
         <th>Auction ID</th>
         <th>Bid</th>
     </tr>
     {% for phone in phones %}
-    <tr>
-        <td>{{ phone.phone_id }}</td>
-        <td>{{ phone.brand }}</td>
-        <td>{{ phone.model }}</td>
-        <td>{{ phone.category.category_name }}</td>
-        <td>{{ phone.current_price }}</td>
-        <td>{{ phone.auction_id }}</td>
+        <tr>
+            <td>{{ phone.phone_id }}</td>
+            <td>{{ phone.brand }}</td>
+            <td>{{ phone.model }}</td>
+            <td>{{ phone.category.category_name }}</td>
+            {% if phone.category.category_name == "Smartphone" %}
+                <td><img src="../static/images/image1.jpg" class="bid-image"></td>
+            {% elif phone.category.category_name == "Feature Phone" %}
+                <td><img src="../static/images/image2.jpg" class="bid-image"></td>
+            {% else %}
+                <td><img src="../static/images/image3.jpg" class="bid-image"></td>
+            {% endif %}
 
-        <td><a href="{% url 'bid_view' phone.auction_id %}">
-            <button>Bid</button>
-        </a>
-        </td>
-    </tr>
+            <td>{{ phone.current_price }}</td>
+            <td>{{ phone.auction_id }}</td>
+            <td><a href="{% url 'bid_view' phone.auction_id %}">
+                <button>Bid</button>
+            </a>
+            </td>
+        </tr>
     {% endfor %}
 </table>
 </body>
