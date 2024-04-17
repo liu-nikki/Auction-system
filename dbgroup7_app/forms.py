@@ -1,5 +1,5 @@
 from django import forms
-from .models import Paymentinfo, Shipping, Auction, Bid, Phone, Category
+from .models import Paymentinfo, Shipping, Bid, Category
 
 class PaymentInfoForm(forms.ModelForm):
     class Meta:

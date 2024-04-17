@@ -94,7 +94,7 @@ if os.getenv('GAE_APPLICATION', None):
             'ENGINE': 'django.db.backends.mysql',
             'HOST': '/cloudsql/db-group7:us-west1:dbgroup7',
             'USER': 'root',
-            'PASSWORD': '12345678',
+            'PASSWORD': '1234',
             'NAME': 'CS5200_Project',
         }
     }

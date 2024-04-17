@@ -6,11 +6,11 @@
     <title>List a Phone for Auction</title>
 </head>
 <body>
-    <h1>List a New Phone for Auction</h1>
+    <h1>List a New Item for Auction</h1>
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
-        <input type="submit" value="List Phone and Auction">
+        <input type="submit" value="List this item for Auction">
     </form>
 </body>
 </html>
