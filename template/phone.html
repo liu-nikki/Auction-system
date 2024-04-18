@@ -27,6 +27,11 @@
             top: 8px;
             right: 16px;
         }
+        
+        .top-right a {
+            display: block;  /* Makes each link a block, putting them on new lines */
+            margin-bottom: 4px; /* Adds a small space between the buttons */
+        }
 
         .bid-image {
             max-width: 100px; /* Adjust this value to control the width of the image */
@@ -72,10 +77,16 @@
 
             <td>{{ phone.current_price }}</td>
             <td>{{ phone.auction_id }}</td>
-            <td><a href="{% url 'bid_view' phone.auction_id %}">
-                <button>Bid</button>
-            </a>
+            <td>
+                {% if phone.auction_id %}
+                    <a href="{% url 'bid_view' phone.auction_id %}">
+                        <button>Bid</button>
+                    </a>
+                {% else %}
+                    <span>No Auction Available</span>
+                {% endif %}
             </td>
+            
         </tr>
     {% endfor %}
 </table>

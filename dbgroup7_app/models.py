@@ -21,7 +21,7 @@ class Adminuser(models.Model):
 
 class Auction(models.Model):
     auction_id = models.IntegerField(primary_key=True)
-    phone = models.ForeignKey('Phone', models.DO_NOTHING, blank=True, null=True)
+    phone = models.ForeignKey('Phone', on_delete=models.CASCADE, blank=True, null=True)
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
     starting_price = models.DecimalField(max_digits=10, decimal_places=2)
@@ -33,10 +33,10 @@ class Auction(models.Model):
 
 class Bid(models.Model):
     bid_id = models.AutoField(primary_key=True)
-    auction = models.ForeignKey(Auction, models.DO_NOTHING, blank=True, null=True)
+    auction = models.ForeignKey(Auction, on_delete=models.CASCADE, blank=True, null=True)
     # normal_user = models.ForeignKey('Normaluser', models.DO_NOTHING, blank=True, null=True)
     normal_user = models.ForeignKey('Normaluser', on_delete=models.CASCADE, blank=True, null=True)
-    admin_user = models.ForeignKey(Adminuser, models.DO_NOTHING, blank=True, null=True)
+    #admin_user = models.ForeignKey(Adminuser, models.DO_NOTHING, blank=True, null=True)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     timestamp = models.DateTimeField(auto_now_add=True)
 

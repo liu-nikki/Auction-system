@@ -18,6 +18,9 @@ def payment_and_shipping_view(request, auction_id):
             shipping_info.auction = auction
             payment_info.save()
             shipping_info.save()
+            phone = auction.phone
+            auction.delete()
+            phone.delete()
             return render(request, 'success.html', {'auction': auction})  # Pass auction to the template if needed
     else:
         payment_form = PaymentInfoForm(prefix='payment')
@@ -38,20 +41,6 @@ def phone(request):
 def login(req):
     return render(req, 'login.html')
 
-# after login 
-# def login_view(req):
-#     name = req.POST.get("name", "")
-#     pwd = req.POST.get("password", "")
-#     if name and pwd:
-#         # see if match database 
-#         c = Normaluser.objects.filter(username=name, password=pwd)
-#         if c.exists():
-#             # return HttpResponse("Login Successfully!")
-#             return HttpResponseRedirect(reverse('phone'))
-#         else:
-#             return HttpResponse("A wrong user name or password.")
-#     else:
-#         return HttpResponse("Please login.")
 
 def login_view(req):
     if req.method == "POST":
@@ -105,19 +94,6 @@ def register_view(req):
 def admin_login(req):
     return render(req, 'admin.html')
 
-
-# def admin_view(req):
-#     name = req.POST.get("name", "")
-#     pwd = req.POST.get("password", "")
-#     if name and pwd:
-#         # see if match database 
-#         c = Adminuser.objects.filter(username=name, password=pwd)
-#         if c.exists():
-#             return HttpResponse("Admin Login Successfully!")
-#         else:
-#             return HttpResponse("A wrong admin user name or password.")
-#     else:
-#         return HttpResponse("Please login.")
 def admin_view(req):
     name = req.POST.get("name", "")
     pwd = req.POST.get("password", "")
