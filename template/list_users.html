@@ -23,5 +23,9 @@
       {% endfor %}
     </table>
     <a href="{% url 'toregister' %}">Add a new user</a>
+    <div style="text-align: left; margin-top: 20px;">
+      <a href="{% url 'logout' %}"><button>Logout</button></a>
+    </div>
+    <!-- <a href="{% url 'logout' %}" style="position: absolute; top: 20px; right: 20px;">Logout</a> -->
   </body>
 </html>

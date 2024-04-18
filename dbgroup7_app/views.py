@@ -143,7 +143,6 @@ def bid_view(request, auction_id):
 
     else:
         form = BidForm()
-
     return render(request, 'dbgroup7_app/bid_page.html', {'auction': auction, 'form': form})
 
 def list_phone_auction_view(request):
@@ -192,3 +191,7 @@ def delete_user(request, user_id):
     user = get_object_or_404(Normaluser, pk=user_id)
     user.delete()
     return redirect('list_users')
+
+def logout_view(request):
+    # logout(request)
+    return redirect('login')  # Assumes you have a URL named 'login_view' for your login page

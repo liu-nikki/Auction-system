@@ -8,6 +8,7 @@
         table {
             border-collapse: collapse;
             width: 100%;
+            margin-top: 50px;
         }
 
         th, td {
@@ -27,7 +28,7 @@
             top: 8px;
             right: 16px;
         }
-        
+
         .top-right a {
             display: block;  /* Makes each link a block, putting them on new lines */
             margin-bottom: 4px; /* Adds a small space between the buttons */
@@ -48,6 +49,7 @@
     <a href="{% url 'profile_view' %}">
         <button>Profile</button>
     </a>
+    <a href="{% url 'logout' %}"><button>Logout</button></a> 
 </div>
 <h2>Auction Items</h2>
 <table>

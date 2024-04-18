@@ -22,7 +22,7 @@ from dbgroup7_app import views
 from dbgroup7_app.views import bid_view, testmysql
 
 urlpatterns = [
-    path('', views.login),
+    path('', views.login, name='login'),
     # path('toregister/', views.to_register),
     path('toregister/', views.to_register, name='toregister'),  # Ensure the name is specified
     path("register/", views.register_view),
@@ -38,5 +38,6 @@ urlpatterns = [
     path('admin/users/', views.list_users, name='list_users'),
     path('admin/users/edit/<int:user_id>/', views.edit_user, name='edit_user'),
     path('admin/users/delete/<int:user_id>/', views.delete_user, name='delete_user'),
+    path('logout/', views.logout_view, name='logout'),
 ]
 
