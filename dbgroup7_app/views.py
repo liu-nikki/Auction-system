@@ -1,7 +1,6 @@
 from django.shortcuts import render, HttpResponse, redirect, get_object_or_404
 from .forms import PaymentInfoForm, ShippingForm, PhoneAuctionForm, BidForm
 from .models import *
-from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 
@@ -28,7 +27,7 @@ def payment_and_shipping_view(request, auction_id):
     return render(request, 'payment_and_shipping.html', {
         'payment_form': payment_form,
         'shipping_form': shipping_form,
-        'auction': auction,  # Provide auction to the template to use its details
+        'auction': auction,
     })
 
 # Create your views here.
@@ -101,49 +100,65 @@ def admin_view(req):
         # check if the credentials match in the database
         c = Adminuser.objects.filter(username=name, password=pwd)
         if c.exists():
-            # Redirect to a new view that shows the admin dashboard or user list
-            return redirect('list_users')  # Assuming 'list_users' is the name of the view you want to redirect to
+            return redirect('list_users')
         else:
             return HttpResponse("A wrong admin user name or password.")
     else:
         return HttpResponse("Please login.")
 
+
 def phone(request):
     phones = Phone.objects.all()
     for phone in phones:
-        auction = Auction.objects.filter(phone_id=phone.phone_id).first()
+        auction = Auction.objects.filter(phone=phone).first()
         if auction:
-            phone.current_price = auction.starting_price
+            highest_bid = Bid.objects.filter(auction=auction).order_by('-amount').first()
+            # If there's a highest bid, set current_price to the highest bid amount
+            if highest_bid:
+                phone.current_price = highest_bid.amount
+            else:
+                # Otherwise, set current_price to the starting price of the auction
+                phone.current_price = auction.starting_price
             phone.auction_id = auction.auction_id
+
     return render(request, 'phone.html', {'phones': phones})
 
 
 def bid_view(request, auction_id):
     auction = get_object_or_404(Auction, pk=auction_id)
+    highest_bid = Bid.objects.filter(auction=auction).order_by('-amount').first()
+    
+    current_highest_bid = highest_bid.amount if highest_bid else auction.starting_price
+
     if request.method == 'POST':
         form = BidForm(request.POST)
         if form.is_valid():
             new_bid_amount = form.cleaned_data['amount']
-            highest_bid = Bid.objects.filter(auction=auction).order_by('-amount').first()
 
-            if highest_bid is None:
-                highest_bid_amount = auction.starting_price
-            else:
-                highest_bid_amount = highest_bid.amount
-
-            if new_bid_amount <= highest_bid_amount + 50:
-                messages.error(request, "Bidding Failed, higher bid price exist, please try again later.")
-            else:
+            # Check if the new bid amount is more than $500 higher than the highest bid
+            if new_bid_amount > current_highest_bid + 500:
                 bid = form.save(commit=False)
                 bid.auction = auction
-                normal_user_instance = get_object_or_404(Normaluser, pk=1)
+                normal_user_instance = get_object_or_404(Normaluser, pk=1)  # Assuming static user, adjust as needed
                 bid.normal_user = normal_user_instance
                 bid.save()
-                return redirect('payment_and_shipping', auction_id=auction.auction_id)  # Adjust this to your actual payment page URL name
+                return redirect('payment_and_shipping', auction_id=auction.auction_id)
+            else:
+                # Save the bid in all cases
+                bid = form.save(commit=False)
+                bid.auction = auction
+                normal_user_instance = get_object_or_404(Normaluser, pk=1)  # Assuming static user, adjust as needed
+                bid.normal_user = normal_user_instance
+                bid.save()
+                return redirect('phone')
 
     else:
         form = BidForm()
-    return render(request, 'dbgroup7_app/bid_page.html', {'auction': auction, 'form': form})
+    return render(request, 'dbgroup7_app/bid_page.html', {
+        'auction': auction,
+        'form': form,
+        'current_highest_bid': current_highest_bid  # Passing the highest bid to the template
+    })
 
 def list_phone_auction_view(request):
     if request.method == 'POST':
@@ -194,4 +209,4 @@ def delete_user(request, user_id):
 
 def logout_view(request):
     # logout(request)
-    return redirect('login')  # Assumes you have a URL named 'login_view' for your login page
+    return redirect('login')

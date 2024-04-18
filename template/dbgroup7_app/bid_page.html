@@ -10,6 +10,7 @@
         <h1>Bid on {{ auction.phone.brand }} {{ auction.phone.model }}</h1>
         <p>Category: {{ auction.phone.category.category_name }}</p>
         <p>Original Price: ${{ auction.starting_price }}</p>
+        <p>Current Highest Bid: ${{ current_highest_bid }}</p>
     </div>
 
     <div class="bid-form">
